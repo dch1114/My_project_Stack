@@ -7,11 +7,14 @@ public class MovingCube : MonoBehaviour
     private Vector3 moveDirection;      // 이동 방향
 
     private CubeSpawner cubeSpawner;
-    private MoveAxis moveAxis;
+    private PerfectController perfectController;
 
-    public void Setup(CubeSpawner cubeSpawner, MoveAxis moveAxis)
+    private MoveAxis moveAxis;          // 이동 축 (x or z)
+
+    public void Setup(CubeSpawner cubeSpawner, PerfectController perfectController, MoveAxis moveAxis)
     {
         this.cubeSpawner = cubeSpawner;
+        this.perfectController = perfectController;
         this.moveAxis = moveAxis;
 
         if (moveAxis == MoveAxis.x) moveDirection = Vector3.left;
@@ -44,6 +47,24 @@ public class MovingCube : MonoBehaviour
         if (IsGameOver(hangOver))
         {
             return true;
+        }
+
+        // 퍼펙트 여부 검사
+        bool isPerfect = perfectController.IsPerfect(hangOver);
+
+        // isPerfect가 false 일 때만 큐브 조각 생성
+        if (isPerfect == false)
+        {
+            float direction = hangOver >= 0 ? 1 : -1;
+
+            if (moveAxis == MoveAxis.x)
+            {
+                SplitCubeOnX(hangOver, direction);
+            }
+            else if (moveAxis == MoveAxis.z)
+            {
+                SplitCubeOnZ(hangOver, direction);
+            }
         }
 
         // 현재 이동중인 큐브를 정지해서 배치했기 때문에 배치되어 있는 큐브 중
@@ -167,47 +188,3 @@ public class MovingCube : MonoBehaviour
         }
     }
 }
-
-
-
-/*public void ScaleUp()
-	{
-		if ( moveAxis == MoveAxis.x )
-		{
-			float newXSize			= transform.localScale.x + transform.localScale.x * 0.15f;
-			float newXPosition		= transform.position.x - (transform.localScale.x * 0.15f) * 0.5f;
-
-			//transform.position		= new Vector3(newXPosition, transform.position.y, transform.position.z);
-			//transform.localScale	= new Vector3(newXSize, transform.localScale.y, transform.localScale.z);
-			StartCoroutine(ScaleProcess(transform.position, new Vector3(newXPosition, transform.position.y, transform.position.z),
-										transform.localScale, new Vector3(newXSize, transform.localScale.y, transform.localScale.z)));
-		}
-		else
-		{
-			float newZSize			= transform.localScale.z + transform.localScale.z * 0.15f;
-			float newZPosition		= transform.position.z - (transform.localScale.z * 0.15f) * 0.5f;
-
-			//transform.position		= new Vector3(transform.position.x, transform.position.y, newZPosition);
-			//transform.localScale	= new Vector3(transform.localScale.x, transform.localScale.y, newZSize);
-			StartCoroutine(ScaleProcess(transform.position, new Vector3(transform.position.x, transform.position.y, newZPosition),
-										transform.localScale, new Vector3(transform.localScale.x, transform.localScale.y, newZSize)));
-		}
-	}
-
-	private IEnumerator ScaleProcess(Vector3 startPosition, Vector3 endPosition, Vector3 startScale, Vector3 endScale)
-	{
-		float current = 0;
-		float percent = 0;
-		float duration = 0.2f;
-
-		while ( percent < 1 )
-		{
-			current += Time.deltaTime;
-			percent = current / duration;
-
-			transform.position	 = Vector3.Lerp(startPosition, endPosition, percent);
-			transform.localScale = Vector3.Lerp(startScale, endScale, percent);
-
-			yield return null;
-		}
-	}*/

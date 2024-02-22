@@ -88,4 +88,3 @@ public class CameraController : MonoBehaviour
         if (action != null) action.Invoke();
     }
 }
-
