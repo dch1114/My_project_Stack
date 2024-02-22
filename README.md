@@ -31,3 +31,14 @@ Unity Editor Version 2022.3.2f1
 IDE: Visual Studio 2022
 
 ## 플레이 화면
+
+<img src = "https://github.com/dch1114/My_project_Stack/assets/129824716/bc6f78a2-8989-47e3-bac1-2bf9bc8b78ee" width="400" height="800"/>
+
+<img src = "https://github.com/dch1114/My_project_Stack/assets/129824716/c03342e5-850f-4983-93dc-c33ef7462f24" width="400" height="800"/>
+
+---
+<img src = "https://github.com/dch1114/My_project_Stack/assets/129824716/50591907-0a9a-44d9-8c4c-5696c23a352a" width="400" height="800"/>
+
+<img src = "https://github.com/dch1114/My_project_Stack/assets/129824716/0380477d-661e-46df-adce-7df8c86593b1" width="400" height="800"/>
+
+
