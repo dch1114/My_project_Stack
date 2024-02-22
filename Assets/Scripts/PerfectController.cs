@@ -15,9 +15,9 @@ public class PerfectController : MonoBehaviour
     private AudioSource audioSource;
 
     [SerializeField]
-    private int recoveryCombo = 5;          // 큐브의 크기가 증가하는 최소 콤보
-    private float perfectCorrection = 0.01f;    // Perfect로 인정하는 보정 값
-    private float addedSize = 0.1f;         // 기존 큐브 크기에 더해지는 값
+    private int recoveryCombo = 5;
+    private float perfectCorrection = 0.01f;
+    private float addedSize = 0.1f;
     private int perfectCombo = 0;
 
     private void Awake()
@@ -72,7 +72,7 @@ public class PerfectController : MonoBehaviour
 
     private void OnPerfectEffect(Vector3 position, Vector3 scale)
     {
-        // 이펙트 생성 (color.a : 1 to 0)
+        // 이펙트 생성
         Transform effect = Instantiate(perfectEffect);
         effect.position = position;
         effect.localScale = scale;
@@ -86,7 +86,6 @@ public class PerfectController : MonoBehaviour
         float pitchMin = 0.7f;
         float pitchAdditive = 0.15f;
 
-        // maxCombo인 5가 될 때까지 volume과 pitch를 서서히 증가
         if (perfectCombo < maxCombo)
         {
             audioSource.volume = volumeMin + perfectCombo * volumeAdditive;
@@ -98,7 +97,6 @@ public class PerfectController : MonoBehaviour
 
     private IEnumerator OnPerfectComboEffect(Vector3 position, Vector3 scale)
     {
-        // 이펙트 재생 (color.a + transform.localScale)
         // 콤보가 중첩될 때마다 개수 추가
         int currentCombo = 0;
         float beginTime = Time.time;
@@ -110,7 +108,7 @@ public class PerfectController : MonoBehaviour
 
             if (t >= 1)
             {
-                // 이펙트 생성 (color.a : 1 to 0, transform.scale : 1 to 1.5)
+                // 이펙트 생성
                 Transform effect = Instantiate(perfectComboEffect);
                 effect.position = position;
                 effect.localScale = scale;
@@ -131,7 +129,7 @@ public class PerfectController : MonoBehaviour
         // 이펙트 생성 위치
         effect.position = cubeSpawner.CurrentCube.transform.position;
 
-        // 이펙트의 생성 반경 설정 (반지름과 두께)
+        // 이펙트의 생성 반경 설정
         var shape = effect.GetComponent<ParticleSystem>().shape;
         float radius = cubeSpawner.CurrentCube.transform.localScale.x > cubeSpawner.CurrentCube.transform.localScale.z ?
                        cubeSpawner.CurrentCube.transform.localScale.x : cubeSpawner.CurrentCube.transform.localScale.z;

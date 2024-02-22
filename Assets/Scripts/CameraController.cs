@@ -14,7 +14,7 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float gameOverAnimationTime = 1.5f;
     [SerializeField]
-    private float limitMinY = 4;        // 애니메이션 재생을 위한 LastCube의 최소 Y 위치
+    private float limitMinY = 4;
     private Camera mainCamera;
 
     private void Awake()
@@ -24,7 +24,6 @@ public class CameraController : MonoBehaviour
 
     public void MoveOneStep()
     {
-        // 현재 위치에서 이동 큐브의 y 크기인 0.1만큼 위로 이동
         Vector3 start = transform.position;
         Vector3 end = transform.position + Vector3.up * moveDistance;
 
@@ -33,7 +32,6 @@ public class CameraController : MonoBehaviour
 
     public void GameOverAnimation(float lastCubeY, UnityAction action = null)
     {
-        // 마지막에 배치한 lastCube의 y 위치가 limitMinY 보다 작으면 애니메이션 재생 X
         if (limitMinY > lastCubeY)
         {
             if (action != null) action.Invoke();
@@ -41,16 +39,14 @@ public class CameraController : MonoBehaviour
             return;
         }
 
-        // 카메라 y 위치 설정
         Vector3 startPosition = transform.position;
         Vector3 endPosition = new Vector3(transform.position.x, lastCubeY + 1, transform.position.z);
         // 카메라 이동 애니메이션
         StartCoroutine(OnMoveTo(startPosition, endPosition, gameOverAnimationTime));
 
-        // 카메라 View 크기 설정
         float startSize = mainCamera.orthographicSize;
         float endSize = lastCubeY - 1;
-        // 카메라 View 크기 변경 애니메이션
+
         StartCoroutine(OnOrthographicSizeTo(startSize, endSize, gameOverAnimationTime, action));
     }
 

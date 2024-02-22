@@ -3,13 +3,13 @@ using UnityEngine;
 public class MovingCube : MonoBehaviour
 {
     [SerializeField]
-    private float moveSpeed = 1.5f; // 이동 속도
-    private Vector3 moveDirection;      // 이동 방향
+    private float moveSpeed = 1.5f;
+    private Vector3 moveDirection;
 
     private CubeSpawner cubeSpawner;
     private PerfectController perfectController;
 
-    private MoveAxis moveAxis;          // 이동 축 (x or z)
+    private MoveAxis moveAxis;
 
     public void Setup(CubeSpawner cubeSpawner, PerfectController perfectController, MoveAxis moveAxis)
     {
@@ -23,7 +23,6 @@ public class MovingCube : MonoBehaviour
 
     private void Update()
     {
-        // 이동 축을 기준으로 -1.5 ~ 1.5 위치를 왕복 이동
         transform.position += moveDirection * moveSpeed * Time.deltaTime;
 
         if (moveAxis == MoveAxis.x)
@@ -67,8 +66,6 @@ public class MovingCube : MonoBehaviour
             }
         }
 
-        // 현재 이동중인 큐브를 정지해서 배치했기 때문에 배치되어 있는 큐브 중
-        // 가장 상단에 있는 큐브로 LastCube 프로퍼티에 저장
         cubeSpawner.LastCube = this.transform;
 
         return false;
@@ -78,8 +75,6 @@ public class MovingCube : MonoBehaviour
     {
         float amount = 0;
 
-        // x축으로 이동 중일 때는 x축에 겹치지 않는 부분이 발생하고,
-        // z축으로 이동 중일 때는 z축에 겹치지 않는 부분이 발생
         if (moveAxis == MoveAxis.x)
         {
             amount = transform.position.x - cubeSpawner.LastCube.transform.position.x;
@@ -142,24 +137,19 @@ public class MovingCube : MonoBehaviour
             clone.transform.localScale = new Vector3(transform.localScale.x, transform.localScale.y, fallingBlockSize);
         }
 
-        // 방금 생성한 조각 큐브의 색상 설정, 중력을 받아 아래로 떨어지도록 Rigidbody 컴포넌트 추가
         clone.GetComponent<MeshRenderer>().material.color = GetComponent<MeshRenderer>().material.color;
         clone.AddComponent<Rigidbody>();
 
-        // 2초 뒤에 삭제
         Destroy(clone, 2);
     }
 
     private bool IsGameOver(float hangOver)
     {
-        // 이동 큐브와 LastCube의 겹치지 않는 부분(hangOver) 값이 LastCube의 크기보다 큰 경우는
-        // 아예 겹치지 않는다는 얘기이고, 이 경우 게임 오버로 처리한다.
-        float max = moveAxis == MoveAxis.x ? cubeSpawner.LastCube.transform.localScale.x :
-                                             cubeSpawner.LastCube.transform.localScale.z;
+
+        float max = moveAxis == MoveAxis.x ? cubeSpawner.LastCube.transform.localScale.x : cubeSpawner.LastCube.transform.localScale.z;
 
         if (Mathf.Abs(hangOver) > max)
         {
-            // 게임 오버
             return true;
         }
 
